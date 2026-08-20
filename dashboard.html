@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EarnPesa Menu</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, sans-serif;
+}
+
+body{
+  background:#f1f5f9;
+  overflow-x:hidden;
+}
+
+/* ================= TOP BAR ================= */
+
+.topbar{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:65px;
+
+  background:linear-gradient(90deg,#10b981,#2563eb);
+
+  color:white;
+  padding:0 20px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  z-index:1000;
+
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
+}
+
+.logo{
+  font-size:21px;
+  font-weight:bold;
+}
+
+/* ================= HAMBURGER ================= */
+
+.hamburger{
+  width:30px;
+  height:25px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+
+  cursor:pointer;
+  z-index:1100;
+}
+
+.hamburger span{
+  width:100%;
+  height:4px;
+
+  background:white;
+  border-radius:5px;
+
+  transition:.3s ease;
+}
+
+.hamburger.active span:nth-child(1){
+  transform:translateY(10px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2){
+  opacity:0;
+}
+
+.hamburger.active span:nth-child(3){
+  transform:translateY(-10px) rotate(-45deg);
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+  position:fixed;
+
+  top:0;
+  left:-290px;
+
+  width:280px;
+  height:100vh;
+
+  background:linear-gradient(
+    180deg,
+    #10b981 0%,
+    #2563eb 100%
+  );
+
+  padding-top:75px;
+
+  overflow-y:auto;
+
+  transition:left .35s ease;
+
+  z-index:1050;
+
+  box-shadow:5px 0 25px rgba(0,0,0,.3);
+}
+
+.sidebar.active{
+  left:0;
+}
+
+/* ================= MENU ITEMS ================= */
+
+.menu-item{
+  color:white;
+
+  padding:14px 20px;
+
+  display:flex;
+  align-items:center;
+
+  gap:12px;
+
+  cursor:pointer;
+
+  font-size:15px;
+
+  border-left:4px solid transparent;
+
+  transition:.2s ease;
+}
+
+.menu-item:hover{
+  background:rgba(255,255,255,.15);
+  border-left-color:#fbbf24;
+  padding-left:25px;
+}
+
+.menu-item.active{
+  background:rgba(255,255,255,.2);
+  border-left-color:#fbbf24;
+}
+
+/* ================= OVERLAY ================= */
+
+.overlay{
+  position:fixed;
+
+  top:0;
+  left:0;
+
+  width:100%;
+  height:100%;
+
+  background:rgba(0,0,0,.5);
+
+  opacity:0;
+  visibility:hidden;
+
+  transition:.3s ease;
+
+  z-index:1040;
+}
+
+.overlay.active{
+  opacity:1;
+  visibility:visible;
+}
+
+/* ================= CONTENT ================= */
+
+.content{
+  padding:100px 20px 40px;
+
+  text-align:center;
+}
+
+.content h1{
+  color:#10b981;
+  margin-bottom:10px;
+}
+
+.content p{
+  color:#64748b;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:400px){
+
+  .sidebar{
+    width:270px;
+    left:-280px;
+  }
+
+  .logo{
+    font-size:19px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= TOP BAR ================= -->
+
+<header class="topbar">
+
+  <div class="logo">
+    💰 EarnPesa
+  </div>
+
+  <div
+    class="hamburger"
+    id="hamburger"
+    onclick="toggleMenu()"
+    aria-label="Open menu"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+</header>
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<nav class="sidebar" id="sidebar">
+
+  <div class="menu-item active" onclick="selectMenu(this,'Dashboard')">
+    🏠 Dashboard
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Available Surveys')">
+    📋 Available Surveys
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Wallet')">
+    👛 Wallet
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Featured Surveys')">
+    ⭐ Featured Surveys
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Hot Surveys')">
+    🔥 Hot Surveys
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Survey History')">
+    🕐 Survey History
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'My Rewards')">
+    💰 My Rewards
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Bonus Center')">
+    🎁 Bonus Center
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Earnings')">
+    📈 Earnings
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Refer & Earn')">
+    👥 Refer & Earn
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Leaderboard')">
+    🏆 Leaderboard
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Daily Challenges')">
+    🎯 Daily Challenges
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Notifications')">
+    🔔 Notifications
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'My Profile')">
+    👤 My Profile
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Settings')">
+    ⚙️ Settings
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Help & FAQ')">
+    ❓ Help & FAQ
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Contact Support')">
+    💬 Contact Support
+  </div>
+
+  <div class="menu-item" onclick="selectMenu(this,'Terms & Conditions')">
+    📜 Terms & Conditions
+  </div>
+
+  <div class="menu-item" onclick="logout()">
+    🚪 Logout
+  </div>
+
+</nav>
+
+
+<!-- ================= OVERLAY ================= -->
+
+<div
+  class="overlay"
+  id="overlay"
+  onclick="closeMenu()"
+></div>
+
+
+<!-- ================= CONTENT ================= -->
+
+<main class="content">
+
+  <h1 id="pageTitle">
+    Welcome to EarnPesa
+  </h1>
+
+  <p id="pageMessage">
+    Click the hamburger menu ☰ to open the navigation.
+  </p>
+
+</main>
+
+
+<script>
+
+/* ================= ELEMENTS ================= */
+
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");
+const hamburger = document.getElementById("hamburger");
+
+const pageTitle = document.getElementById("pageTitle");
+const pageMessage = document.getElementById("pageMessage");
+
+
+/* ================= OPEN / CLOSE MENU ================= */
+
+function toggleMenu(){
+
+  sidebar.classList.toggle("active");
+  overlay.classList.toggle("active");
+  hamburger.classList.toggle("active");
+
+}
+
+
+function closeMenu(){
+
+  sidebar.classList.remove("active");
+  overlay.classList.remove("active");
+  hamburger.classList.remove("active");
+
+}
+
+
+/* ================= MENU CLICK ================= */
+
+function selectMenu(element,name){
+
+  /* Remove previous active item */
+
+  document
+    .querySelectorAll(".menu-item")
+    .forEach(item => {
+      item.classList.remove("active");
+    });
+
+
+  /* Add active state */
+
+  element.classList.add("active");
+
+
+  /* Update page */
+
+  pageTitle.textContent = name;
+
+  pageMessage.textContent =
+    "You selected " + name + ".";
+
+
+  /* Close sidebar */
+
+  closeMenu();
+
+}
+
+
+/* ================= LOGOUT ================= */
+
+function logout(){
+
+  const confirmLogout =
+    confirm("Are you sure you want to logout?");
+
+  if(confirmLogout){
+
+    closeMenu();
+
+    pageTitle.textContent = "Logged Out";
+
+    pageMessage.textContent =
+      "You have been logged out.";
+
+    /*
+      Later you can redirect to:
+
+      window.location.href = "login.html";
+    */
+
+  }
+
+}
+
+
+/* ================= ESC KEY ================= */
+
+document.addEventListener("keydown",function(event){
+
+  if(event.key === "Escape"){
+    closeMenu();
+  }
+
+});
+
+</script>
+
+</body>
+  </html>
