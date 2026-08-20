@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>EarnPesa - Login</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #006b3c, #00a86b);
+      padding: 20px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 420px;
+      background: #fff;
+      padding: 32px 25px;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,.2);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .logo h1 {
+      color: #008f52;
+      font-size: 32px;
+    }
+
+    .logo p {
+      color: #777;
+      margin-top: 5px;
+    }
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      outline: none;
+      font-size: 15px;
+    }
+
+    input:focus {
+      border-color: #00a86b;
+      box-shadow: 0 0 0 3px rgba(0,168,107,.1);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #008f52;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      padding: 12px;
+      margin-bottom: 18px;
+      border-radius: 9px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .error {
+      display: block;
+      background: #ffe8e8;
+      color: #c62828;
+    }
+
+    .success {
+      display: block;
+      background: #e7f8ee;
+      color: #08783e;
+    }
+
+    .register {
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+    }
+
+    .register a {
+      color: #008f52;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 12px;
+      text-align: center;
+      color: #777;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+
+    <div class="logo">
+      <h1>EarnPesa</h1>
+      <p>Welcome back</p>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <form id="loginForm">
+
+      <div class="input-group">
+        <label for="email">Email Address</label>
+
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter your email"
+          required
+          autocomplete="email"
+        >
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter your password"
+          required
+          autocomplete="current-password"
+        >
+      </div>
+
+      <button type="submit" id="loginBtn">
+        Login
+      </button>
+
+      <div class="loading" id="loading">
+        Logging in...
+      </div>
+
+    </form>
+
+    <div class="register">
+      Don't have an account?
+      <a href="/register.html">Create Account</a>
+    </div>
+
+  </div>
+
+  <script>
+
+    const loginForm = document.getElementById("loginForm");
+    const loginBtn = document.getElementById("loginBtn");
+    const loading = document.getElementById("loading");
+    const message = document.getElementById("message");
+
+    function showMessage(text, type) {
+
+      message.textContent = text;
+      message.className = "message " + type;
+
+    }
+
+    loginForm.addEventListener("submit", async function(event) {
+
+      event.preventDefault();
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const password =
+        document.getElementById("password").value;
+
+      if (!email || !password) {
+
+        showMessage(
+          "Please enter your email and password.",
+          "error"
+        );
+
+        return;
+      }
+
+      loginBtn.disabled = true;
+      loading.style.display = "block";
+
+      message.className = "message";
+      message.textContent = "";
+
+      try {
+
+        const response = await fetch("/api/login", {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            email,
+            password
+          })
+
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+
+          showMessage(
+            data.error || "Login failed.",
+            "error"
+          );
+
+          return;
+        }
+
+        /*
+          Save the logged-in user's ID.
+
+          The dashboard can use this ID to request:
+          /api/user/:id
+        */
+
+        localStorage.setItem(
+          "userId",
+          data.user.id
+        );
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify(data.user)
+        );
+
+        showMessage(
+          "Login successful! Redirecting...",
+          "success"
+        );
+
+        setTimeout(() => {
+
+          window.location.href =
+            "/dashboard.html";
+
+        }, 800);
+
+      } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+          "Unable to connect to the server.",
+          "error"
+        );
+
+      } finally {
+
+        loginBtn.disabled = false;
+        loading.style.display = "none";
+
+      }
+
+    });
+
+  </script>
+
+</body>
+  </html>
