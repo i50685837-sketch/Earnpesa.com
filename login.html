@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: white;
+  overflow: hidden;
+
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255,193,7,.2), transparent 25%),
+    radial-gradient(circle at 85% 80%, rgba(0,255,170,.14), transparent 25%),
+    linear-gradient(135deg, #06140f, #0b2118 45%, #03100b);
+}
+
+/* Money background */
+.money-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 240px;
+  opacity: .035;
+}
+
+.coin {
+  position: absolute;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: bold;
+  color: #5c4100;
+  background: linear-gradient(145deg, #ffe477, #b77a00);
+  box-shadow: 0 0 25px rgba(255,193,7,.25);
+  opacity: .18;
+  animation: float 7s ease-in-out infinite;
+}
+
+.coin:nth-child(2) {
+  left: 8%;
+  top: 13%;
+}
+
+.coin:nth-child(3) {
+  right: 9%;
+  top: 20%;
+  animation-delay: 1.5s;
+}
+
+.coin:nth-child(4) {
+  left: 12%;
+  bottom: 13%;
+  animation-delay: 2.5s;
+}
+
+.coin:nth-child(5) {
+  right: 14%;
+  bottom: 9%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0%,100% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(-22px) rotate(12deg);
+  }
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 410px;
+}
+
+.card {
+  padding: 32px 25px;
+  border-radius: 25px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(7,24,17,.84);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 25px 70px rgba(0,0,0,.55);
+}
+
+.logo {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 16px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 35px;
+
+  background: linear-gradient(145deg, #ffd95a, #a86f00);
+  box-shadow: 0 10px 35px rgba(255,193,7,.25);
+}
+
+h1 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 7px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #aebbb4;
+  font-size: 14px;
+  margin-bottom: 27px;
+}
+
+.input-group {
+  margin-bottom: 17px;
+}
+
+label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 13px;
+  color: #dce5e0;
+}
+
+input {
+  width: 100%;
+  padding: 14px 15px;
+  border-radius: 13px;
+  border: 1px solid rgba(255,255,255,.12);
+  outline: none;
+  background: rgba(255,255,255,.06);
+  color: white;
+  font-size: 15px;
+  transition: .25s;
+}
+
+input::placeholder {
+  color: #718078;
+}
+
+input:focus {
+  border-color: #f6c343;
+  box-shadow: 0 0 0 3px rgba(246,195,67,.1);
+}
+
+.password-box {
+  position: relative;
+}
+
+.password-box input {
+  padding-right: 55px;
+}
+
+.toggle {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #b7c0bb;
+  font-size: 18px;
+}
+
+.forgot {
+  display: block;
+  text-align: right;
+  margin-top: -5px;
+  margin-bottom: 18px;
+  color: #ffd45c;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  border: 0;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: #151006;
+
+  background: linear-gradient(135deg, #ffd95a, #f1ad16);
+  box-shadow: 0 10px 25px rgba(241,173,22,.18);
+  transition: .2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.message {
+  display: none;
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 13px;
+  background: rgba(255,255,255,.06);
+}
+
+.register {
+  text-align: center;
+  margin-top: 21px;
+  color: #9eaaa4;
+  font-size: 14px;
+}
+
+.register a {
+  color: #ffd45c;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.note {
+  margin-top: 16px;
+  text-align: center;
+  color: #718078;
+  font-size: 11px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="money-bg">
+  <div class="pot">🐷</div>
+  <div class="coin">KSh</div>
+  <div class="coin">🪙</div>
+  <div class="coin">KSh</div>
+  <div class="coin">🪙</div>
+</div>
+
+<div class="container">
+  <div class="card">
+
+    <div class="logo">🐷</div>
+
+    <h1>Welcome Back</h1>
+    <p class="subtitle">Login to your account</p>
+
+    <form id="loginForm">
+
+      <div class="input-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="you@example.com"
+          required
+        >
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+
+        <div class="password-box">
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            required
+          >
+          <span class="toggle" id="togglePassword">👁</span>
+        </div>
+      </div>
+
+      <a href="#" class="forgot">Forgot password?</a>
+
+      <button type="submit" id="loginBtn">
+        Login
+      </button>
+
+      <div class="message" id="message"></div>
+
+    </form>
+
+    <div class="register">
+      Don't have an account?
+      <a href="/register.html">Create Account</a>
+    </div>
+
+    <div class="note">
+      Secure account access
+    </div>
+
+  </div>
+</div>
+
+<script>
+const form = document.getElementById("loginForm");
+const button = document.getElementById("loginBtn");
+const message = document.getElementById("message");
+const password = document.getElementById("password");
+const toggle = document.getElementById("togglePassword");
+
+toggle.addEventListener("click", () => {
+  if (password.type === "password") {
+    password.type = "text";
+    toggle.textContent = "🙈";
+  } else {
+    password.type = "password";
+    toggle.textContent = "👁";
+  }
+});
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+  const passwordValue = password.value;
+
+  button.disabled = true;
+  button.textContent = "Logging in...";
+
+  try {
+    const response = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        password: passwordValue
+      })
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(
+        data.message ||
+        data.error ||
+        "Login failed."
+      );
+    }
+
+    /*
+      Store token if your backend returns one.
+    */
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+    }
+
+    if (data.user) {
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
+    }
+
+    showMessage(
+      data.message || "Login successful."
+    );
+
+    setTimeout(() => {
+      window.location.href = "/dashboard.html";
+    }, 800);
+
+  } catch (error) {
+    showMessage(error.message);
+  } finally {
+    button.disabled = false;
+    button.textContent = "Login";
+  }
+});
+
+function showMessage(text) {
+  message.style.display = "block";
+  message.textContent = text;
+}
+</script>
+
+</body>
+  </html>
