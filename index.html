@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Earnpesa — Start Earning Today</title>
+<style>
+  :root{
+    --gold:#FFC93C;
+    --gold-deep:#FF9F1C;
+    --green:#0B6E4F;
+    --green-bright:#12B76A;
+    --purple:#6A0DAD;
+    --pink:#FF3CAC;
+    --navy:#111827;
+    --cream:#FFF8E7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,201,60,0.35), transparent 40%),
+      radial-gradient(circle at 80% 10%, rgba(255,60,172,0.35), transparent 45%),
+      radial-gradient(circle at 50% 90%, rgba(18,183,106,0.35), transparent 50%),
+      linear-gradient(160deg, #1B0E3C 0%, #3B0A5B 35%, #6A0DAD 65%, #B8188A 100%);
+    background-attachment:fixed;
+    color:var(--cream);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* Floating coins background */
+  .coin{
+    position:fixed;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #FFF3C4, var(--gold) 55%, var(--gold-deep) 100%);
+    box-shadow:0 0 20px rgba(255,201,60,0.6), inset 0 0 10px rgba(255,255,255,0.5);
+    opacity:0.85;
+    animation:float 9s ease-in-out infinite;
+    z-index:0;
+  }
+  .coin::after{
+    content:"₭";
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#8a5a00;
+    font-weight:800;
+    font-size:0.9em;
+  }
+  @keyframes float{
+    0%,100%{transform:translateY(0) rotate(0deg);}
+    50%{transform:translateY(-30px) rotate(15deg);}
+  }
+
+  nav{
+    position:relative;
+    z-index:5;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:24px 6vw;
+  }
+  .logo{
+    font-size:1.6rem;
+    font-weight:900;
+    letter-spacing:-0.5px;
+    background:linear-gradient(90deg, var(--gold), #fff, var(--green-bright));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .contact-link{
+    font-size:0.9rem;
+    color:var(--cream);
+    text-decoration:none;
+    border:1px solid rgba(255,255,255,0.3);
+    padding:8px 16px;
+    border-radius:999px;
+    transition:all 0.25s ease;
+    backdrop-filter:blur(4px);
+  }
+  .contact-link:hover{
+    background:rgba(255,255,255,0.15);
+    border-color:var(--gold);
+  }
+
+  main{
+    position:relative;
+    z-index:5;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:8vh 6vw 10vh;
+  }
+
+  .pot-wrap{
+    position:relative;
+    width:220px;
+    height:220px;
+    margin-bottom:10px;
+  }
+  .pot{
+    position:absolute;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:170px;
+    height:110px;
+    background:linear-gradient(180deg,#3a3a3a,#111);
+    border-radius:0 0 90px 90px / 0 0 60px 60px;
+    box-shadow:inset 0 -10px 20px rgba(0,0,0,0.6), 0 15px 30px rgba(0,0,0,0.5);
+  }
+  .pot::before{
+    content:"";
+    position:absolute;
+    top:-14px;
+    left:50%;
+    transform:translateX(-50%);
+    width:190px;
+    height:34px;
+    background:linear-gradient(180deg,#4a4a4a,#1a1a1a);
+    border-radius:50%;
+  }
+  .gold-pile{
+    position:absolute;
+    bottom:70px;
+    left:50%;
+    transform:translateX(-50%);
+    width:150px;
+    height:70px;
+  }
+  .gold-pile span{
+    position:absolute;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #FFF3C4, var(--gold) 55%, var(--gold-deep) 100%);
+    box-shadow:0 0 18px rgba(255,201,60,0.9), inset 0 0 8px rgba(255,255,255,0.6);
+  }
+  .gold-pile span:nth-child(1){left:0; bottom:0;}
+  .gold-pile span:nth-child(2){left:35px; bottom:14px;}
+  .gold-pile span:nth-child(3){left:70px; bottom:0;}
+  .gold-pile span:nth-child(4){left:105px; bottom:16px;}
+  .gold-pile span:nth-child(5){left:50px; bottom:32px;}
+  .sparkle{
+    position:absolute;
+    font-size:1.4rem;
+    animation:twinkle 1.8s ease-in-out infinite;
+  }
+  .sparkle.s1{top:0; left:10px; animation-delay:0s;}
+  .sparkle.s2{top:20px; right:0; animation-delay:0.6s;}
+  .sparkle.s3{top:60px; left:0; animation-delay:1.2s;}
+  @keyframes twinkle{
+    0%,100%{opacity:0.2; transform:scale(0.8);}
+    50%{opacity:1; transform:scale(1.3);}
+  }
+
+  h1{
+    font-size:clamp(2.4rem, 6vw, 4rem);
+    font-weight:900;
+    line-height:1.05;
+    margin-top:20px;
+    background:linear-gradient(90deg, var(--gold) 0%, #fff 40%, var(--pink) 70%, var(--green-bright) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-shadow:0 4px 30px rgba(255,201,60,0.3);
+  }
+  .tagline{
+    max-width:520px;
+    margin:18px auto 40px;
+    font-size:1.15rem;
+    color:rgba(255,255,255,0.85);
+  }
+
+  .cta{
+    display:inline-block;
+    padding:18px 48px;
+    font-size:1.15rem;
+    font-weight:800;
+    color:var(--navy);
+    text-decoration:none;
+    border-radius:999px;
+    background:linear-gradient(90deg, var(--gold), var(--green-bright));
+    box-shadow:0 10px 30px rgba(18,183,106,0.4), 0 10px 30px rgba(255,201,60,0.3);
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+    letter-spacing:0.3px;
+  }
+  .cta:hover{
+    transform:translateY(-4px) scale(1.03);
+    box-shadow:0 16px 40px rgba(18,183,106,0.5), 0 16px 40px rgba(255,201,60,0.4);
+  }
+
+  .stats{
+    display:flex;
+    gap:28px;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-top:64px;
+  }
+  .stat-card{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.18);
+    backdrop-filter:blur(8px);
+    border-radius:18px;
+    padding:22px 28px;
+    min-width:150px;
+  }
+  .stat-card .num{
+    font-size:1.8rem;
+    font-weight:900;
+    background:linear-gradient(90deg, var(--gold), var(--pink));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .stat-card .label{
+    font-size:0.85rem;
+    color:rgba(255,255,255,0.7);
+    margin-top:4px;
+  }
+
+  footer{
+    position:relative;
+    z-index:5;
+    text-align:center;
+    padding:30px;
+    font-size:0.85rem;
+    color:rgba(255,255,255,0.6);
+  }
+  footer a{color:var(--gold); text-decoration:none;}
+
+  @media (max-width:480px){
+    .stats{gap:16px;}
+    .stat-card{padding:16px 20px; min-width:120px;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- floating coins -->
+  <div class="coin" style="width:36px;height:36px; top:12%; left:8%;"></div>
+  <div class="coin" style="width:50px;height:50px; top:22%; left:82%; animation-delay:1s;"></div>
+  <div class="coin" style="width:28px;height:28px; top:65%; left:15%; animation-delay:2s;"></div>
+  <div class="coin" style="width:44px;height:44px; top:75%; left:88%; animation-delay:0.5s;"></div>
+  <div class="coin" style="width:32px;height:32px; top:45%; left:92%; animation-delay:1.5s;"></div>
+  <div class="coin" style="width:26px;height:26px; top:8%; left:45%; animation-delay:2.5s;"></div>
+
+  <nav>
+    <div class="logo">Earnpesa</div>
+    <a class="contact-link" href="mailto:earnpesa@gmail.com">earnpesa@gmail.com</a>
+  </nav>
+
+  <main>
+    <div class="pot-wrap">
+      <div class="gold-pile">
+        <span></span><span></span><span></span><span></span><span></span>
+        <div class="sparkle s1">✨</div>
+        <div class="sparkle s2">✨</div>
+        <div class="sparkle s3">✨</div>
+      </div>
+      <div class="pot"></div>
+    </div>
+
+    <h1>Welcome to Earnpesa</h1>
+    <p class="tagline">Your pot of gold starts here. Simple, fast, and made for Kenya — sign up and start earning today.</p>
+
+    <a class="cta" href="register.html">Get Started</a>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="num">24/7</div>
+        <div class="label">Instant Payouts</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">100%</div>
+        <div class="label">M-Pesa Ready</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">KES</div>
+        <div class="label">Built for Kenya</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2026 Earnpesa. Questions? <a href="mailto:earnpesa@gmail.com">earnpesa@gmail.com</a>
+  </footer>
+
+</body>
+      </html>
+      
