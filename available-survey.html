@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Available Surveys · EarnPesa</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
+    }
+
+    body{
+      background:#f1f5f9;
+      color:#172033;
+      min-height:100vh;
+    }
+
+    /* TOP BAR */
+    .topbar{
+      height:70px;
+      background:linear-gradient(135deg,#087f5b,#0ca678);
+      color:white;
+      display:flex;
+      align-items:center;
+      padding:0 18px;
+      gap:15px;
+      box-shadow:0 4px 15px rgba(0,0,0,.12);
+      position:sticky;
+      top:0;
+      z-index:100;
+    }
+
+    .menu-btn{
+      border:0;
+      background:rgba(255,255,255,.15);
+      color:white;
+      width:42px;
+      height:42px;
+      border-radius:12px;
+      font-size:22px;
+      cursor:pointer;
+    }
+
+    .logo{
+      font-size:21px;
+      font-weight:700;
+    }
+
+    .wallet{
+      margin-left:auto;
+      background:rgba(255,255,255,.15);
+      padding:9px 13px;
+      border-radius:12px;
+      font-size:13px;
+    }
+
+    /* SIDEBAR */
+    .sidebar{
+      position:fixed;
+      top:0;
+      left:-280px;
+      width:270px;
+      height:100vh;
+      background:white;
+      z-index:200;
+      padding:20px 15px;
+      box-shadow:5px 0 20px rgba(0,0,0,.15);
+      transition:.3s ease;
+      overflow-y:auto;
+    }
+
+    .sidebar.active{
+      left:0;
+    }
+
+    .side-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:25px;
+    }
+
+    .side-title h2{
+      color:#087f5b;
+      font-size:21px;
+    }
+
+    .close{
+      border:0;
+      background:#f1f5f9;
+      width:36px;
+      height:36px;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:18px;
+    }
+
+    .nav a{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:#334155;
+      padding:13px;
+      border-radius:12px;
+      margin-bottom:6px;
+      font-size:14px;
+      font-weight:500;
+    }
+
+    .nav a:hover,
+    .nav a.active{
+      background:#e7f8f1;
+      color:#087f5b;
+    }
+
+    .overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.4);
+      z-index:150;
+      display:none;
+    }
+
+    .overlay.active{
+      display:block;
+    }
+
+    /* CONTENT */
+    .container{
+      width:min(1100px,94%);
+      margin:25px auto 50px;
+    }
+
+    .welcome{
+      background:white;
+      border-radius:20px;
+      padding:22px;
+      margin-bottom:20px;
+      box-shadow:0 5px 20px rgba(15,23,42,.06);
+    }
+
+    .welcome h1{
+      font-size:24px;
+      margin-bottom:6px;
+    }
+
+    .welcome p{
+      color:#64748b;
+      font-size:14px;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .stat{
+      background:#f8fafc;
+      padding:15px;
+      border-radius:15px;
+    }
+
+    .stat small{
+      display:block;
+      color:#64748b;
+      margin-bottom:5px;
+    }
+
+    .stat strong{
+      font-size:18px;
+      color:#087f5b;
+    }
+
+    /* FILTER */
+    .filter{
+      display:flex;
+      gap:10px;
+      overflow-x:auto;
+      margin-bottom:18px;
+      padding-bottom:3px;
+    }
+
+    .filter button{
+      border:0;
+      background:white;
+      color:#475569;
+      padding:10px 17px;
+      border-radius:20px;
+      cursor:pointer;
+      white-space:nowrap;
+      box-shadow:0 3px 10px rgba(0,0,0,.05);
+    }
+
+    .filter button.active{
+      background:#087f5b;
+      color:white;
+    }
+
+    /* SURVEYS */
+    .survey-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+    }
+
+    .survey-card{
+      background:white;
+      border-radius:20px;
+      padding:20px;
+      box-shadow:0 5px 20px rgba(15,23,42,.06);
+      transition:.2s;
+      position:relative;
+    }
+
+    .survey-card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 10px 25px rgba(15,23,42,.10);
+    }
+
+    .badge{
+      position:absolute;
+      top:15px;
+      right:15px;
+      background:#fff3bf;
+      color:#946200;
+      font-size:11px;
+      padding:5px 9px;
+      border-radius:20px;
+      font-weight:600;
+    }
+
+    .survey-icon{
+      width:52px;
+      height:52px;
+      border-radius:15px;
+      background:#e7f8f1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:25px;
+      margin-bottom:14px;
+    }
+
+    .survey-card h3{
+      font-size:17px;
+      margin-bottom:7px;
+    }
+
+    .description{
+      color:#64748b;
+      font-size:13px;
+      line-height:1.6;
+      margin-bottom:15px;
+    }
+
+    .details{
+      display:flex;
+      gap:15px;
+      flex-wrap:wrap;
+      margin-bottom:17px;
+    }
+
+    .detail{
+      font-size:12px;
+      color:#64748b;
+    }
+
+    .detail strong{
+      color:#172033;
+      display:block;
+      font-size:14px;
+    }
+
+    .reward{
+      color:#087f5b;
+    }
+
+    .start-btn{
+      width:100%;
+      border:0;
+      background:linear-gradient(135deg,#087f5b,#0ca678);
+      color:white;
+      padding:12px;
+      border-radius:12px;
+      font-size:14px;
+      font-weight:600;
+      cursor:pointer;
+    }
+
+    .start-btn:hover{
+      opacity:.9;
+    }
+
+    /* EMPTY */
+    .empty{
+      display:none;
+      background:white;
+      border-radius:20px;
+      padding:40px 20px;
+      text-align:center;
+      color:#64748b;
+    }
+
+    .empty-icon{
+      font-size:45px;
+      margin-bottom:10px;
+    }
+
+    /* MOBILE */
+    @media(max-width:700px){
+      .stats{
+        grid-template-columns:1fr;
+      }
+
+      .survey-grid{
+        grid-template-columns:1fr;
+      }
+
+      .welcome h1{
+        font-size:21px;
+      }
+
+      .wallet{
+        font-size:11px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <button class="menu-btn" onclick="openMenu()">☰</button>
+    <div class="logo">EarnPesa</div>
+    <div class="wallet">Balance: <strong id="balance">KES 450</strong></div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="side-title">
+      <h2>EarnPesa</h2>
+      <button class="close" onclick="closeMenu()">×</button>
+    </div>
+
+    <nav class="nav">
+      <a href="Dashboard.html">🏠 Dashboard</a>
+      <a href="AVAILABLE-survey.html" class="active">📋 Available Surveys</a>
+      <a href="wallet.html">💳 Wallet</a>
+      <a href="featured-surveys.html">⭐ Featured Surveys</a>
+      <a href="hot-surveys.html">🔥 Hot Surveys</a>
+      <a href="history.html">🕐 Survey History</a>
+      <a href="rewards.html">💰 My Rewards</a>
+      <a href="bonus.html">🎁 Bonus Center</a>
+      <a href="earnings.html">📈 Earnings</a>
+      <a href="refer.html">👥 Refer & Earn</a>
+      <a href="leaderboard.html">🏆 Leaderboard</a>
+      <a href="challenges.html">🎯 Daily Challenges</a>
+      <a href="profile.html">👤 Profile</a>
+      <a href="settings.html">⚙️ Settings</a>
+      <a href="login.html">🚪 Log Out</a>
+    </nav>
+
+  </aside>
+
+  <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+  <!-- MAIN -->
+  <main class="container">
+
+    <section class="welcome">
+      <h1>Available Surveys 📋</h1>
+      <p>Complete surveys and earn rewards directly to your EarnPesa account.</p>
+
+      <div class="stats">
+        <div class="stat">
+          <small>Available Surveys</small>
+          <strong id="surveyCount">6</strong>
+        </div>
+
+        <div class="stat">
+          <small>Potential Earnings</small>
+          <strong>KES 1,850</strong>
+        </div>
+
+        <div class="stat">
+          <small>Your Balance</small>
+          <strong id="balance2">KES 450</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILTER -->
+    <div class="filter">
+      <button class="active" onclick="filterSurveys('all',this)">All</button>
+      <button onclick="filterSurveys('short',this)">⚡ Short</button>
+      <button onclick="filterSurveys('high',this)">💰 High Reward</button>
+      <button onclick="filterSurveys('featured',this)">⭐ Featured</button>
+    </div>
+
+    <!-- SURVEY GRID -->
+    <section class="survey-grid" id="surveyGrid">
+
+      <article class="survey-card" data-type="short">
+        <span class="badge">Quick</span>
+        <div class="survey-icon">📱</div>
+        <h3>Mobile Usage Survey</h3>
+        <p class="description">
+          Tell us about your mobile phone and internet usage habits.
+        </p>
+
+        <div class="details">
+          <div class="detail">
+            <strong>5 min</strong>
+            Time
+          </div>
+          <div class="detail">
+            <strong class="reward">KES 150</strong>
+            Reward
+          </div>
+          <div class="detail">
+            <strong>Easy</strong>
+            Difficulty
+          </div>
+        </div>
+
+        <button class="start-btn" onclick="startSurvey('Mobile Usage Survey',150)">
+          Start Survey
+        </button>
+      </article>
+
+      <article class="survey-card" data-type="high">
+        <span class="badge">High Reward</span>
+        <div class="survey-icon">🛒</div>
+        <h3>Shopping Habits</h3>
+        <p class="description">
+          Share your thoughts about shopping, brands and products you use.
+        </p>
+
+        <div class="details">
+          <div class="detail">
+            <strong>12 min</strong>
+            Time
+          </div>
+          <div class="detail">
+            <strong class="reward">KES 350</strong>
+            Reward
+          </div>
+          <div class="detail">
+            <strong>Medium</strong>
+            Difficulty
+          </div>
+        </div>
+
+        <button class="start-btn" onclick="startSurvey('Shopping Habits',350)">
+          Start Survey
+        </button>
+      </article>
+
+      <article class="survey-card" data-type="featured">
+        <span class="badge">Featured</span>
+        <div class="survey-icon">🎬</div>
+        <h3>Entertainment Survey</h3>
+        <p class="description">
+          Tell us about movies, music, games and entertainment you enjoy.
+        </p>
+
+        <div class="details">
+          <div class="detail">
+            <strong>8 min</strong>
+            Time
+          </div>
+          <div class="detail">
+            <strong class="reward">KES 250</strong>
+            Reward
+          </div>
+          <div class="detail">
+            <strong>Easy</strong>
+            Difficulty
+          </div>
+        </div>
+
+        <button class="start-btn" onclick="startSurvey('Entertainment Survey',250)">
+          Start Survey
+        </button>
+      </article>
+
+      <article class="survey-card" data-type="high">
+        <span class="badge">Popular</span>
+        <div class="survey-icon">🏦</div>
+        <h3>Financial Services Survey</h3>
+        <p class="description">
+          Share general opinions about financial services and payment methods.
+        </p>
+
+        <div class="details">
+          <div class="detail">
+            <strong>15 min</strong>
+            Time
+          </div>
+          <div class="detail">
+            <strong class="reward">KES 450</strong>
+            Reward
+          </div>
+          <div class="detail">
+            <strong>Medium</strong>
+            Difficulty
+          </div>
+        </div>
+
+        <button class="start-btn" onclick="startSurvey('Financial Services Survey',450)">
+          Start Survey
+        </button>
+      </article>
+
+      <article class="survey-card" data-type="short">
+        <span class="badge">Quick</span>
+        <div class="survey-icon">🍔</div>
+        <h3>Food Preferences</h3>
+        <p class="description">
+          Tell us about your food preferences and everyday choices.
+        </p>
+
+        <div class="details">
+          <div class="detail">
+            <strong>4 min</strong>
+            Time
+          </div>
+          <div class="detail">
+            <strong class="reward">KES 100</strong>
+            Reward
+          </div>
+          <div class="detail">
+            <strong>Easy</strong>
+            Difficulty
+          </div>
+        </div>
+
+        <button class="start-btn" onclick="startSurvey('Food Preferences',100)">
+          Start Survey
+        </button>
+      </article>
+
+      <article class="survey-card" data-type="featured">
+        <span class="badge">Featured</span>
+        <div class="survey-icon">💻</div>
+        <h3>Technology Survey</h3>
+        <p class="description">
+          Share your opinions about technology, apps and digital services.
+        </p>
+
+        <div class="details">
+          <div class="detail">
+            <strong>10 min</strong>
+            Time
+          </div>
+          <div class="detail">
+            <strong class="reward">KES 550</strong>
+            Reward
+          </div>
+          <div class="detail">
+            <strong>Medium</strong>
+            Difficulty
+          </div>
+        </div>
+
+        <button class="start-btn" onclick="startSurvey('Technology Survey',550)">
+          Start Survey
+        </button>
+      </article>
+
+    </section>
+
+    <div class="empty" id="empty">
+      <div class="empty-icon">🔍</div>
+      <h3>No surveys found</h3>
+      <p>Try selecting another category.</p>
+    </div>
+
+  </main>
+
+  <script>
+    function openMenu(){
+      document.getElementById("sidebar").classList.add("active");
+      document.getElementById("overlay").classList.add("active");
+    }
+
+    function closeMenu(){
+      document.getElementById("sidebar").classList.remove("active");
+      document.getElementById("overlay").classList.remove("active");
+    }
+
+    function filterSurveys(type, button){
+
+      document.querySelectorAll(".filter button").forEach(btn=>{
+        btn.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+      const cards = document.querySelectorAll(".survey-card");
+      let visible = 0;
+
+      cards.forEach(card=>{
+        if(type === "all" || card.dataset.type === type){
+          card.style.display = "block";
+          visible++;
+        }else{
+          card.style.display = "none";
+        }
+      });
+
+      document.getElementById("empty").style.display =
+        visible === 0 ? "block" : "none";
+
+      document.getElementById("surveyCount").textContent = visible;
+    }
+
+    function startSurvey(name, reward){
+
+      localStorage.setItem("currentSurvey", name);
+      localStorage.setItem("currentReward", reward);
+
+      /*
+        Replace this page with your real survey page when ready.
+      */
+      window.location.href =
+        "Survey.html?name=" +
+        encodeURIComponent(name) +
+        "&reward=" +
+        reward;
+    }
+
+    // Load saved balance if available
+    const savedBalance = localStorage.getItem("earnpesaBalance");
+
+    if(savedBalance){
+      document.getElementById("balance").textContent =
+        "KES " + Number(savedBalance).toLocaleString();
+
+      document.getElementById("balance2").textContent =
+        "KES " + Number(savedBalance).toLocaleString();
+    }
+  </script>
+
+</body>
+  </html>
